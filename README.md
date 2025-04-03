@@ -1,10 +1,10 @@
-FreshAI
+# FreshAI
 
 FreshAI es un sistema de agentes orquestados diseñado para generar y actualizar proyectos de forma automática mediante modelos de inteligencia artificial. Utilizando un orquestador (Fresh) basado en gpt-4o-mini y agentes especializados en Python, Node.js y Rust, FreshAI facilita la creación de proyectos y la mejora de proyectos existentes. Además, implementa un mecanismo básico de "memoria" que inyecta parte del historial de interacciones (almacenado en history.txt) en cada solicitud, permitiendo que la IA tenga contexto acumulativo. Este proyecto es privado y se comparte únicamente entre personas de confianza.
 
     Nota: Este proyecto es privado. La API_KEY se gestiona mediante un archivo de entorno, por lo que es fundamental mantener el repositorio en un entorno seguro.
 
-Contenido del Proyecto
+### Contenido del Proyecto
 
     agents.py: Script principal que integra:
 
@@ -26,7 +26,7 @@ Contenido del Proyecto
 
     notes.txt: Archivo para guardar notas o comentarios adicionales sobre el proceso.
 
-Prerrequisitos
+### Prerrequisitos
 
     Python 3.7 o superior.
 
@@ -34,7 +34,7 @@ Prerrequisitos
 
     Una clave de API válida de OpenAI.
 
-Instalación
+#### Instalación
 
     Clonar el repositorio:
 
@@ -43,13 +43,15 @@ git clone https://github.com/tu_usuario/FreshAI.git
 cd FreshAI
 ```
 
-Instalar las dependencias:
+### Instalar las dependencias:
 
 Se requiere la biblioteca openai y dotenv para gestionar variables de entorno. Instálalos mediante:
 
+```
 pip install openai dotenv
+```
 
-Crear el archivo de entorno:
+### Crear el archivo de entorno:
 
 Crea un fichero llamado .env en la raíz del proyecto y añade la siguiente línea, reemplazando <KEY> por tu clave de API de OpenAI:
 
@@ -58,7 +60,7 @@ Crea un fichero llamado .env en la raíz del proyecto y añade la siguiente lín
 
     El código de FreshAI está configurado para leer la clave de la API desde este archivo, de modo que no debas modificar la clave directamente en el código.
 
-Uso
+#### Uso
 Ejecución del Script
 
     Abre una terminal en la carpeta del proyecto y ejecuta:
@@ -67,11 +69,9 @@ Ejecución del Script
 python agents.py
 ```
 
-El sistema te solicitará que introduzcas la descripción del proyecto. Por ejemplo:
+### El sistema te solicitará que introduzcas la descripción del proyecto. Por ejemplo:
 
-    ```
     Introduce la descripción del proyecto: Crear una aplicación multiplataforma para gestionar tareas, con un backend en Python, una interfaz web en Node.js y componentes críticos en Rust.
-    ```
 
     FreshAI (a través del orquestador Fresh) generará un plan de tareas en formato JSON, dividiendo la descripción en subtareas (indicando el lenguaje, nombre del archivo y descripción de lo que debe contener).
 
@@ -79,7 +79,7 @@ El sistema te solicitará que introduzcas la descripción del proyecto. Por ejem
 
     Al finalizar, se te preguntará si deseas actualizar un proyecto existente. Si respondes "s", se solicitará la ruta del proyecto a actualizar y la versión mejorada se guardará en el directorio playground_updated.
 
-Memoria y Registro
+## Memoria y Registro
 
     Memoria Contextual:
     Cada solicitud a la API incluye parte del historial almacenado en history.txt para proporcionar contexto acumulativo a la IA.
@@ -90,7 +90,7 @@ Memoria y Registro
 
         Usa notes.txt para documentar observaciones o comentarios sobre el proceso.
 
-Personalización
+## Personalización
 
     Prompts y Modelos:
     Puedes modificar los prompts y las instrucciones en agents.py para adaptar el comportamiento de cada agente a las necesidades específicas de tu grupo.
