@@ -60,7 +60,7 @@ Crea un fichero llamado .env en la raíz del proyecto y añade la siguiente lín
 
     El código de FreshAI está configurado para leer la clave de la API desde este archivo, de modo que no debas modificar la clave directamente en el código.
 
-#### Uso
+## Uso
 Ejecución del Script
 
     Abre una terminal en la carpeta del proyecto y ejecuta:
