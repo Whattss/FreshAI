@@ -4,7 +4,6 @@ import json
 import os
 from dotenv import load_dotenv
 
-
 load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
@@ -230,7 +229,6 @@ def actualizar_proyecto(ruta_origen, ruta_destino="playground_updated"):
         for file in files:
             ext = os.path.splitext(file)[1].lower()
             if ext in [".py", ".js", ".jsx", ".rs"]:
-                # Determinar el lenguaje según la extensión
                 if ext == ".py":
                     lenguaje = "Python"
                 elif ext in [".js", ".jsx"]:
@@ -253,7 +251,6 @@ def actualizar_proyecto(ruta_origen, ruta_destino="playground_updated"):
                     agregar_historial(f"Archivo actualizado: {ruta_nueva}")
                     print(f"Archivo actualizado: {ruta_nueva}")
             else:
-                # Copiar archivos que no se actualizan
                 ruta_archivo = os.path.join(root, file)
                 rel_path = os.path.relpath(ruta_archivo, ruta_origen)
                 ruta_nueva = os.path.join(ruta_destino, rel_path)
@@ -265,6 +262,32 @@ def actualizar_proyecto(ruta_origen, ruta_destino="playground_updated"):
                     fout.write(contenido)
                 agregar_historial(f"Archivo copiado sin cambios: {ruta_nueva}")
                 print(f"Archivo copiado sin cambios: {ruta_nueva}")
+
+# Agente Explicador: genera una guía y explicación del proyecto
+def explicar_proyecto(proyecto_descripcion, plan):
+    prompt = (
+        f"Eres un experto en documentación y divulgación técnica. Basándote en la siguiente descripción del proyecto: {proyecto_descripcion} "
+        f"y en el siguiente plan de tareas: {json.dumps(plan, indent=2)}, genera una explicación detallada y una guía para el usuario. "
+        "La explicación debe incluir: una descripción general del proyecto, la estructura de carpetas y archivos, cómo ejecutarlo, "
+        "y cómo funciona cada parte. La respuesta debe estar en formato Markdown sin delimitadores y ser lo más guiativa posible."
+    )
+    agregar_historial("Agente Explicador - Prompt:\n" + prompt)
+    try:
+        respuesta = llamar_api_con_memoria(
+            model="gpt-4o-mini",
+            prompt=prompt,
+            instructions="Genera la explicación en formato Markdown sin ningún delimitador adicional.",
+            tools=[],
+            stream=False
+        )
+        explicacion = limpiar_markdown(respuesta.output_text.strip())
+        agregar_historial("Agente Explicador - Respuesta:\n" + explicacion)
+        return explicacion
+    except Exception as e:
+        error_msg = f"Error al generar la explicación del proyecto: {e}"
+        print(error_msg)
+        agregar_historial(error_msg)
+        return ""
 
 if __name__ == "__main__":
     # Paso 1: Crear el proyecto nuevo
@@ -288,6 +311,16 @@ if __name__ == "__main__":
         os.makedirs(ruta_actualizada, exist_ok=True)
         actualizar_proyecto(ruta_existente, ruta_actualizada)
         print(f"El proyecto actualizado se ha generado en la carpeta '{ruta_actualizada}'.")
+    
+    # Paso 3: Generar una guía y explicación del proyecto
+    print("Generando la explicación y guía del proyecto...")
+    guia = explicar_proyecto(proyecto_descripcion, plan_tareas)
+    if guia:
+        with open("project_guide.md", "w", encoding="utf-8") as f:
+            f.write(guia)
+        print("La guía del proyecto se ha guardado en 'project_guide.md'.")
+        print("Guía del proyecto:")
+        print(guia)
     
     guardar_nota("Proceso finalizado para el proyecto: " + proyecto_descripcion)
     print("Historial guardado en 'history.txt' y notas en 'notes.txt'.")
