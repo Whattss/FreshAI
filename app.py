@@ -2,8 +2,10 @@
 import openai
 import json
 import os
-from dotenv import dotenv
+from dotenv import load_dotenv
 
+
+load_dotenv()
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # Funciones de historial y notas
